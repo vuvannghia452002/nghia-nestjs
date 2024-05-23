@@ -1,0 +1,44 @@
+1
+00:00:00,960 --> 00:00:06,300
+When working in a monolithic architecture with a single application that contains all of our business logic.
+
+2
+00:00:06,720 --> 00:00:14,290
+These monolithic applications are usually divided into modules but all these modules are deployed together as a single unit.
+
+3
+00:00:14,340 --> 00:00:21,160
+These applications are usually deployed onto a single server and all the modules share the same memory ansi huh.
+
+4
+00:00:21,690 --> 00:00:28,420
+The modules communicate with each other using in-process calls be it. Function calls method calls etc.
+
+5
+00:00:28,590 --> 00:00:35,080
+That's why we can easily share data between modules and we can also use transactions that span multiple modules.
+
+6
+00:00:35,940 --> 00:00:43,350
+Also we can easily debug monolithic applications as we have a single process and we can easily trace the execution flow.
+
+7
+00:00:43,950 --> 00:00:52,390
+On the other hand and a microservices architecture that we learned about in a previous lesson. We have a set of small services that are deployed independently.
+
+8
+00:00:53,340 --> 00:00:58,470
+Each service is a separate application that contains all of the business logic for a specific domain.
+
+9
+00:00:58,890 --> 00:01:10,450
+The services can communicate with each other using the network via http tcp etc or message brokers such as rabbit em que kafka and so on and so forth.
+
+10
+00:01:11,280 --> 00:01:18,390
+Just keep in mind that each architecture has its pros and cons. Monolithic applications are usually easier to develop Andy bug.
+
+11
+00:01:18,750 --> 00:01:28,000
+In there are also easier to deploy. On the other hand microservices tend to be easier to scale and maintain in are usually more resilient to failures.
+

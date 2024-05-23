@@ -1,0 +1,108 @@
+1
+00:00:00,660 --> 00:00:09,870
+In this lesson will create our first microservice and call it workflows dash service. Our existing virtual facility service that were created near the beginning of this course.
+
+2
+00:00:10,200 --> 00:00:21,210
+Will use this new microservice to manage workflows. Meaning create monitor etc. To make things simpler will use the nastiest cla to convert our project into a mono repo.
+
+3
+00:00:21,750 --> 00:00:34,090
+Will also use the cla to generate the new microservice within this motto repo. Just in case you're not familiar with the term a mono repo is a single repository that contains multiple projects.
+
+4
+00:00:34,290 --> 00:00:42,270
+In our case. Will have to projects eat virtual facility project our existing nest yes application and the workflows service project.
+
+5
+00:00:42,660 --> 00:00:51,670
+Our new microservice. Having them both in a single repository will make it easy ear to share interfaces models in other common code between them.
+
+6
+00:00:52,230 --> 00:00:59,770
+So let's get started by opening up our terminal and running the following command. Nest g app workflows dash service.
+
+7
+00:01:00,420 --> 00:01:06,760
+This command will generate a new nest yes application called workflows service and place it in the apps directory.
+
+8
+00:01:07,140 --> 00:01:14,680
+Who will also update the nest sila Jace on file and add a new workflows day ash service entry to the projects section.
+
+9
+00:01:15,570 --> 00:01:25,950
+If we look at the directory structure we can see that instead of having a src or source folder. We now have to applications virtual dash facility and workflows dash service.
+
+10
+00:01:26,340 --> 00:01:35,140
+Both located in the apps directory. To keep things simple will use http as the communication protocol between the two applications.
+
+11
+00:01:35,640 --> 00:01:42,540
+We'll dive into other protocols and built in message broker integrations in future lessons. Before we proceed.
+
+12
+00:01:42,960 --> 00:01:48,820
+Let's make sure we update the port on which the workflows service application will run to avoid conflicts.
+
+13
+00:01:49,170 --> 00:01:55,800
+Let's open up the workflows service main t file and update the port to three thousand and one. This way.
+
+14
+00:01:56,220 --> 00:02:08,782
+Both applications will run on different ports and will be able to run them side by side. Of all right so let's get her hands dirty and start by creating a new resource in the workflow service application calling it workflows service.
+
+15
+00:02:08,940 --> 00:02:14,910
+Will use the nastiest zeolite to generate this resource for us so let's head over to our terminals and run the following command.
+
+16
+00:02:15,390 --> 00:02:22,650
+Nest g resource workflows. The seal i will then prompted to select which application where we want to gen rate this resource and.
+
+17
+00:02:23,280 --> 00:02:31,720
+Will select the workflows service application. Then the sale i will generate the resource for us and update the workflows service application module.
+
+18
+00:02:33,360 --> 00:02:41,950
+Next up inside of the virtual facility application let's create a new buildings modul that will use this workflow service to manage workflows.
+
+19
+00:02:42,210 --> 00:02:54,370
+So let's run the following command. Nest g resource buildings. With this resource and place. Let's open up the newly generated building service file and add a new method here called create workflow.
+
+20
+00:02:55,410 --> 00:03:08,200
+This method will call the workflows service to create a new workflow. Ideally we would declare this logic in a separate workflows service but for the sake of simplicity will keep everything any single service for now.
+
+21
+00:03:08,490 --> 00:03:22,720
+No. For those using older versions of no jas. Lower than virgin seventeen you may need to install the no dash fetch package to use the fetch function or alternatively use nastiest slash axios for the same functionality.
+
+22
+00:03:23,430 --> 00:03:32,070
+Now. Let's add a call to this new method right after we create a new building. So in the file let's head to the create method and add the following code inside their.
+
+23
+00:03:32,820 --> 00:03:41,440
+As always the code can be found below the course video. Excellent. Let's head of or to our terminal and now start both applications.
+
+24
+00:03:41,730 --> 00:03:53,110
+Let's enter in and p m run start com def dash dash virtual dash facility. And in a separate terminal window and pm run start calling def dash dash workflows dash service.
+
+25
+00:03:53,700 --> 00:04:14,950
+With both applications running let's use curl to create a new building and test everything out. If we look at the terminal where the virtual facility application is running we can see that there are no errors this means we successfully called the workflow service application from the virtual facility application and have our first microservices up and running great job.
+
+26
+00:04:15,570 --> 00:04:24,340
+Of course everything we have here so far is all very basic but we have a great starting point for us to learn more about microservices and how to use them witness Jess.
+
+27
+00:04:24,990 --> 00:04:34,480
+In the next many lessons will dive even deeper into the microservices architecture and learn how to use ness js to build even the most complex microservice applications.
+

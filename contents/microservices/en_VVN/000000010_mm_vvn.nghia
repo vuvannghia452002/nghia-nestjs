@@ -1,0 +1,112 @@
+1
+00:00:01,170 --> 00:00:07,780
+Before we dive into the differences between vertical and horizontal scaling let's first define what scaling is.
+
+2
+00:00:07,890 --> 00:00:19,360
+Scaling is the process of adding more resources to our application to handle the increased load. This can be measured in terms of requests per second concurrent users etc.
+
+3
+00:00:19,500 --> 00:00:25,320
+Scaling horizontally and vertically are similar in that they both involve adding more computing resources to our system.
+
+4
+00:00:25,650 --> 00:00:33,930
+They just do it in different ways. Vertically scaling or scaling up. Means more resources cpu memory etc to a single server.
+
+5
+00:00:34,410 --> 00:00:46,360
+This is usually done by upgrading the servers hardware meaning adding more ram cpu etc. Vertical scaling is straightforward but it's usually limited to the hardware and can be quite expensive.
+
+6
+00:00:46,740 --> 00:01:00,130
+Horizontal scaling or scaling out. Means adding more servers notes machines to our system. Consequently this means that we need to distribute the load across multiple servers which is typically done using a load balancer.
+
+7
+00:01:00,840 --> 00:01:06,450
+When deciding between vertical and horizontal scaling we need to consider the pros and cons of each approach.
+
+8
+00:01:06,780 --> 00:01:14,010
+Or example in a database world horizontal scaling is usually based on the partitioning of data. While with vertical scaling.
+
+9
+00:01:14,371 --> 00:01:21,400
+Killing is done through multi-core for example by spreading the load between the cpu and ram resources of the machine.
+
+10
+00:01:22,290 --> 00:01:27,989
+With horizontal scaling were not limited by the hardware but we need to deal with other additional complexity.
+
+11
+00:01:28,350 --> 00:01:40,300
+Much as load balancing data consistency etc. In this lesson will demonstrate how horizontal scaling works in practice by increasing the number of instances of our service using docker compose.
+
+12
+00:01:41,670 --> 00:01:54,010
+Note that in real world systems you would use a container orchestration tool such as kubernetes to scale your services depending on different metrics such a cpu usage memory usage traffic etc.
+
+13
+00:01:54,240 --> 00:02:01,390
+We won't be able to dive into kubernetes. Since it's a bit outside of the scope and complexity of what we're trying to learn in this course.
+
+14
+00:02:02,220 --> 00:02:09,940
+So let's get started by opening up art docker compose yaml file and adding a new deploy property to the workflows service.
+
+15
+00:02:11,430 --> 00:02:27,160
+But save our changes recreate our containers and start everything up with docker compose up. As we can already see in the logs there are multiple instances of the workflows service running now see the one two three suffixes on everything.
+
+16
+00:02:27,720 --> 00:02:34,870
+Next up. Let's navigate to the workflows service file and declare a new private variable lager as follows.
+
+17
+00:02:37,110 --> 00:02:42,400
+With this variable in place let's update the create method to lock that we're creating a new workflow.
+
+18
+00:02:43,260 --> 00:02:59,770
+Let's save our changes had to the terminal and create three buildings using curl. Now let's switch to the other terminal window and check those logs.
+
+19
+00:03:01,110 --> 00:03:08,860
+As we can see. Instead of distributing load between multiple instances nats delivered the message to all instances.
+
+20
+00:03:08,940 --> 00:03:21,330
+Which is known as broadcasting but that's actually not what we want. Let's fixed up real quick. In nats when subscribers register themselves to retrieve messages from a publisher the one to n.
+
+21
+00:03:21,660 --> 00:03:28,450
+Van out pattern of messaging ensures that any message sent by a publisher reaches all subscribers that have registered.
+
+22
+00:03:29,250 --> 00:03:35,640
+Nats provides in additional feature named q which allows subscribers to register themselves as part of a queue.
+
+23
+00:03:36,210 --> 00:03:44,290
+Subscribers that are part of a queue form a queue group. So. How can we configure our subscribers to be a part of a queue group that.
+
+24
+00:03:45,360 --> 00:03:59,290
+Well. We can do this by passing the queue option to the server configuration. So let's open up the main t s file in the workflows service application and update the connect microservice method to pass the queue option to the server configuration.
+
+25
+00:04:01,680 --> 00:04:14,440
+Let's save our changes head over to the terminal and crete three buildings once again using curl. Switch to the other terminal window and once again let's check those logs.
+
+26
+00:04:15,270 --> 00:04:22,450
+And look at that. As we can see. The load now distributed between multiple instances of the workflows service great.
+
+27
+00:04:23,160 --> 00:04:30,390
+As we mentioned at the beginning of this lesson in real-world systems you would use a container orchestration tool such as kubernetes to scale your services.
+
+28
+00:04:30,720 --> 00:04:43,630
+Were putting on different metrics such a cpu usage memory usage traffic etc. In our case here since we're just doing things for demonstration purposes we simply hard-coded the number of instances in our docker compose file.
+

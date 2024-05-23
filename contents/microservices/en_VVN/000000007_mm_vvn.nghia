@@ -1,0 +1,164 @@
+1
+00:00:00,990 --> 00:00:07,090
+In this lesson will configure docker compose to run our virtual facility and workflows service applications.
+
+2
+00:00:07,260 --> 00:00:14,280
+As was provision a dedicated postgres sql database or each application. If you're not familiar with docker compose.
+
+3
+00:00:14,670 --> 00:00:24,450
+It's a tool for defining and running multi container docker applications. With docker compose we can use a yaml file to configure our application services then.
+
+4
+00:00:24,810 --> 00:00:34,960
+With a single command we can create and start all the services from our configuration. Let's start by creating a new docker dash compose yeah html file in the root of our project.
+
+5
+00:00:35,070 --> 00:00:43,840
+This file will contain the configuration for our docker compose setup. Again you can find the content for this file below the course video.
+
+6
+00:00:44,130 --> 00:00:54,790
+Also. We will need a dockerfile that will be used to build the docker image for our applications. Let's create a new dockerfile in the root of our project and add the following code.
+
+7
+00:00:58,650 --> 00:01:05,860
+With this violent place as head over to our terminal and run the following commands. Docker compose up.
+
+8
+00:01:12,244 --> 00:01:23,560
+Test that everything is working as expected. Let's use curl to create a new building again. As we can see the request was not yet successful.
+
+9
+00:01:23,910 --> 00:01:28,890
+This is because we need to update the virtual facility application to use the workflow service host.
+
+10
+00:01:29,310 --> 00:01:40,230
+Instead of using local host. Since now or applications are running inside of docker containers. To fix this let's open up the buildings service ts file an update the create workflow method.
+
+11
+00:01:40,646 --> 00:01:55,630
+Use the workflows dash service host instead of local host. Let's try that curl command again. And as we can see the request was now successful great.
+
+12
+00:01:56,520 --> 00:02:07,420
+However our services don't connect to their corresponding databases yet. As this is something we've already covered in the fundamentals course will skip over the details and just move right into the code.
+
+13
+00:02:08,160 --> 00:02:19,740
+First when you to install some required dependencies. Will be using type r m for this courses or m needs but of course you may need to use something completely different in your app or organization but don't worry.
+
+14
+00:02:20,070 --> 00:02:26,010
+Everything we're doing in this course would all still the same. So let's go ahead and install the nastiest slashed her or him.
+
+15
+00:02:26,520 --> 00:02:33,760
+A bar him and pg a proposed gross. Once the installation process is complete. Will create two entities.
+
+16
+00:02:33,900 --> 00:02:43,180
+Building in the virtual facility application. And workflow in the workflows application. As these entities will live in separate applications.
+
+17
+00:02:43,380 --> 00:02:54,430
+We won't be able to declare a one too many relationship between them. Instead we'll use a building ID field in the workflow entity to store the idea of the building to which the workflow belongs.
+
+18
+00:02:55,710 --> 00:03:05,650
+Next let's make sure we update the virtual facility application module to import the type r ram module and configure it to connect to the virtual dash facility database.
+
+19
+00:03:11,700 --> 00:03:17,890
+We'll also need to update the workflows service application module to connect to the workflows service database.
+
+20
+00:03:22,590 --> 00:03:31,630
+With this and place. Let's open up the building service file and use the type or ram repository here replacing all of the mocked methods.
+
+21
+00:03:36,930 --> 00:03:46,210
+Next up let's update the buildings module t s file to import type or a module dot for feature. Passing in the building entity to the array.
+
+22
+00:03:46,260 --> 00:03:56,020
+That the service could inject the buildings repository. And likewise let's update the workflows service he has file replacing all the mock methods here as well.
+
+23
+00:03:59,910 --> 00:04:08,350
+And let's not forget the workflows module and let's make sure we import the type or a module for feature passing in the workflow entity here as well.
+
+24
+00:04:08,610 --> 00:04:16,260
+Great. Once again we're moving fast here since we've covered all of these basic m concepts and the fundamentals course.
+
+25
+00:04:16,768 --> 00:04:25,660
+You could find the code to copy paste below the course video as always. Moving on to newer topics to reuse data transfer object classes between applications.
+
+26
+00:04:25,770 --> 00:04:32,400
+When need to generate a new workflows library using the nastiest July. One head over to our terminal and run the following command.
+
+27
+00:04:32,850 --> 00:04:43,270
+Nest g lib workflows. Let's start by removing the unnecessary auto generated files from the workflows library.
+
+28
+00:04:48,660 --> 00:04:55,590
+Next up. Will create a new detail directory and create the create dash workflow dot d t o duck ts file.
+
+29
+00:04:55,950 --> 00:05:07,210
+Representing the data transfer object for creating a new workflow. Before we proceed let's install the class transformer and class val alligator packages that will use for validation purposes.
+
+30
+00:05:07,530 --> 00:05:22,540
+Finally. Has declared the create workflow detail class and add the necessary validation decorators. Next to this file let's create the update dash workflow dot d t n t s file represented the data transfer object for updating a workflow.
+
+31
+00:05:22,980 --> 00:05:30,690
+Lastly let's update the index t s file to export both of these classes. Great. Now with the someplace.
+
+32
+00:05:31,050 --> 00:05:39,490
+Let's open up our workflows service file an update the correct method their to use our newly created great work float data transfer object.
+
+33
+00:05:39,900 --> 00:05:46,900
+We can also remove the auto-generated detail classes here which were previously generated by the nest g resource schematic.
+
+34
+00:05:47,790 --> 00:05:55,390
+Another thing to note. Let's not forget to update the workflows controller file to use these new data transfer object classes as well.
+
+35
+00:05:55,710 --> 00:06:07,360
+Rate so let's save our changes and to achieve maximum type safety. Let's update the buildings service t file to use the workflows library data transfer object class also.
+
+36
+00:06:09,870 --> 00:06:19,690
+Excellent. Since now our service returns Jason instead of plain text. Let's make sure to change that rez dot text method to rest up Jason.
+
+37
+00:06:21,060 --> 00:06:43,570
+And lastly for debugging purposes. Let's logged a response body to the console. With this in place. Let's save our changes head over to our terminal i run the following curl command.
+
+38
+00:06:44,550 --> 00:06:53,310
+As we can see the request was successful and we can see the response body in the console great. This means that we successfully created a new building.
+
+39
+00:06:53,814 --> 00:06:59,280
+Let's switch to the other terminal window and check to see if the workflow was created as well. Perfect.
+
+40
+00:06:59,700 --> 00:07:08,070
+As we can see there's a new workflow with the name my workflow and the building ID is set to one just as we passed and and are curl command rate.
+
+41
+00:07:08,520 --> 00:07:16,930
+We now have to microservices that communicate with each other all while using separate databases. Were starting to make some real progress already awesome.
+

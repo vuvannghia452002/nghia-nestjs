@@ -1,0 +1,20 @@
+1
+00:00:00,840 --> 00:00:08,410
+Before we kick things off. Let's start by generating an empty nest as application just so we have something we can work with in the following lessons.
+
+2
+00:00:08,610 --> 00:00:16,810
+Let's head over to our terminals and entering the nest new command. Calling our project virtual dash facility or whatever you wish.
+
+3
+00:00:19,380 --> 00:00:28,685
+Once everything finishes installing let's cd or change directory into our newly created application in our case by entering cd virtual dashed facility.
+
+4
+00:00:29,490 --> 00:00:37,090
+With our initial starter and place we can now start or application in development mode with n p m run start colon depth.
+
+5
+00:00:37,320 --> 00:00:45,880
+As always our application will now be available on port three thousand and there we have it were all set and ready to continue moving forward.
+

@@ -1,0 +1,208 @@
+1
+00:00:01,083 --> 00:00:08,020
+The transactional outbox pattern is a design pattern that can be used to ensure data consistency among different services.
+
+2
+00:00:08,250 --> 00:00:15,250
+In this pattern instead of directly calling other services are sending messages to the message broker as part of the local transaction.
+
+3
+00:00:15,420 --> 00:00:25,930
+We first and sir a new message into the database table called outbox and then. Send it to the other services using a separate process called outbox processor.
+
+4
+00:00:27,330 --> 00:00:37,570
+For example when we create a new building in our current system we first and sir a new building into the database and then create a new workflow for this building by calling the workflows service.
+
+5
+00:00:37,890 --> 00:00:49,050
+With the transactional outbox pattern. Instead of calling the workflows service we were the insert a new record to the outbox table as part of the local database to transaction that represents a task.
+
+6
+00:00:49,440 --> 00:01:03,040
+Which eventually we'll call this service. Lastly we would need a background job or process called outbox processor that would periodically check the outbox table for new messages and send them to the message broker.
+
+7
+00:01:04,230 --> 00:01:12,100
+Don't worry if all of this sounds a bit confusing at this point things will become much clearer once we implement this pattern in our application in just a moment.
+
+8
+00:01:12,540 --> 00:01:28,350
+Okay so let's start things off by creating a new outbox module in the virtual facility project. Know that instead of generating this module in the virtual facility we could technically generated in the libs folder making it available to all other applications in our motto repo.
+
+9
+00:01:28,710 --> 00:01:38,230
+It is very likely that we may end up needing this functionality in other applications after all as an exercise try to generate a new library yourself and move the outbox module their.
+
+10
+00:01:38,550 --> 00:01:54,250
+Next let create a new outbox entity with a few columns in the outbox module. And next let's generate a new outbox service file in the outbox module as well.
+
+11
+00:01:55,230 --> 00:02:01,750
+Once the file as generated let's inject the outbox repository provider using the inject repository decorate.
+
+12
+00:02:06,240 --> 00:02:18,420
+Next let's declare a new get unprocessed messages method that will return all unprocessed messages. This method here takes and options parameter that lets us filter messages by the target service.
+
+13
+00:02:18,750 --> 00:02:27,670
+Also all messages are sorted by the created at column in a ending order. Let's save our changes and open up the outbox module file.
+
+14
+00:02:29,370 --> 00:02:46,330
+Let's import the type or a module for feature method and pass the outbox entity to it. Also will need the workflows service client available in the context of this module slots import the clients module and supply the workflows service configuration there.
+
+15
+00:02:49,950 --> 00:02:57,835
+Great. Note that registering this provider here effectively means that will have two different client instances for the workflow service.
+
+16
+00:02:57,930 --> 00:03:10,410
+One provided in the buildings module file and one provided in the outbox module file. Ideally. We create a new module that will be responsible for providing the workflow service client but for simplicity's sake.
+
+17
+00:03:10,740 --> 00:03:21,610
+Will leave it as is for now. Now that we have the outbox module in place let's open up the building service file and inject the data source provider using the standard approach.
+
+18
+00:03:26,670 --> 00:03:40,090
+Next let's scroll down to the create method and update the code to initialize the transaction. With the transaction initialized let's retrieve the buildings repository from the query runner object.
+
+19
+00:03:40,560 --> 00:03:53,280
+Also. Lets retrieve the outbox repository so we can insert a new message into the outbox table. Let's wrap everything up in a try catch block and roll back the transaction if an error occurs otherwise.
+
+20
+00:03:53,640 --> 00:04:12,910
+Let's commit the transaction. Now using our local buildings repository let's insert a new building into the database.
+
+21
+00:04:14,040 --> 00:04:27,030
+Afterwards but since a new message into the outbox table. Perfect. Now whenever we create a new building will also and sir a new message into that outbox table.
+
+22
+00:04:27,480 --> 00:04:34,494
+If the transaction fails. The message won't be inserted and so it will be never sent to the workflows service.
+
+23
+00:04:35,040 --> 00:04:40,870
+The last remaining step we have is to create a new background job or process called the outbox processor.
+
+24
+00:04:41,340 --> 00:04:48,040
+As processor will periodically checked the outbox table for new messages and send them to the message broker if any are found.
+
+25
+00:04:48,330 --> 00:04:53,670
+We could also listened to the postgres events to trigger the senate process but for simplicity's sake.
+
+26
+00:04:54,030 --> 00:05:01,420
+Will use a simple crown based approach in this course. Just know that you have multiple choices for api since here on how to handle this.
+
+27
+00:05:01,650 --> 00:05:21,808
+So let's create a new outbox processor t s file in the outbox module with the following content. With all of our needed dependencies injected let's declare a new dispatch workflow event method that will send a new event to art workflows service.
+
+28
+00:05:28,440 --> 00:05:35,560
+Inside this process outbox messages method let's retrieve all unprocessed messages from our outbox table.
+
+29
+00:05:39,000 --> 00:05:50,710
+Next let's iterate over the messages and send them to our message broker. And last but not least let's register the outbox processor provider in the outbox module file.
+
+30
+00:05:54,090 --> 00:06:01,750
+Also let's not forget to import the schedule module in the app module file so that our background job or process can be executed properly.
+
+31
+00:06:03,120 --> 00:06:18,050
+Let's save our changes and before we test everything else let's make sure we also update the workflows create message handler to use the event pattern decorator instead of the message pattern decorator since we're now using the emit method to send event to the workflow service.
+
+32
+00:06:21,270 --> 00:06:26,620
+Let's save our changes here and head over to the terminal and make sure everything is up and running.
+
+33
+00:06:28,050 --> 00:06:35,050
+If you're seeing any errors just double check that you followed all the steps we just covered if the application is up and running smoothly.
+
+34
+00:06:35,190 --> 00:06:58,630
+Let's create a new building using curl to test everything out. Now let's wait a little bit. And as we can see there's that created workflow log message which means that our workflow service successfully received the workflows create event fantastic everything's working great.
+
+35
+00:07:00,180 --> 00:07:06,555
+Before we wrap up in this lesson let speed things up a little bit by leveraging type of rams entity subscribers.
+
+36
+00:07:06,840 --> 00:07:16,500
+As we mentioned at the beginning of this lesson. We could listen to the post gress events to trigger this sending process basically whenever a new outbox record is inserted.
+
+37
+00:07:16,920 --> 00:07:33,180
+Post would emit an event instructing or applique location to send a message to the message broker. With type r m we could achieve a somewhat similar functionality by using entity subscribers however please note that this approach might not be suitable for all use cases.
+
+38
+00:07:33,660 --> 00:07:45,070
+If you'd rather process messages in batches you should stick to the cron based approach. Will just showcase this option as it might be suitable for some use cases and applications out there.
+
+39
+00:07:45,120 --> 00:07:54,940
+Okay so to begin with the enemy subscriber approach. Let's create a new outbox entity subscriber ts file in the outbox module with the following content.
+
+40
+00:07:57,720 --> 00:08:07,660
+Let's break this class down so everything makes much more sense. First were adding this class to the data source subscribers array so that it can listen to entity events.
+
+41
+00:08:08,220 --> 00:08:19,960
+The listen to method indicates which entities the subscriber is interested it. Lastly. The after insert method is called after the entity is inserted into the database.
+
+42
+00:08:20,340 --> 00:08:26,020
+In this method. You may have noticed that we also immediately dispatched the message to the message broker.
+
+43
+00:08:26,520 --> 00:08:34,120
+Now with this class and place it's open up the outbox module file and registered the outbox entity subscriber class as a provider.
+
+44
+00:08:34,680 --> 00:08:39,820
+Let's save our changes as an head over to the terminal and make sure everything is still up and running.
+
+45
+00:08:40,530 --> 00:08:49,270
+If so let's again create a new building using curl. Now let's switch back to our terminal and look at the logs once more.
+
+46
+00:08:49,740 --> 00:08:55,600
+As we can see a new workflow was created almost immediately after the building was created now it worked.
+
+47
+00:08:56,190 --> 00:09:04,390
+So to summarize. In this lesson we learned how to use the transactional outbox pattern to ensure data consistency among different services.
+
+48
+00:09:04,740 --> 00:09:16,300
+This pattern is particularly useful when we can't afford to lose messages and we need to make sure that they are eventually delivered to the consumer service hence achieving these so called at least once delivery guaranteed.
+
+49
+00:09:16,650 --> 00:09:24,360
+Before we finish let's focus on one little caveat you might have thought about already. What if after sending a message to the workflows service.
+
+50
+00:09:24,690 --> 00:09:35,700
+The outbox processor process crashes before removing the message from the database. In this case when the application recovers the message will be sent again and obviously we wouldn't want that.
+
+51
+00:09:36,030 --> 00:09:42,910
+This is why the outbox pattern lets us achieve at least once delivery guarantee not exactly once delivery.
+
+52
+00:09:43,050 --> 00:09:51,420
+In other words we can't guarantee that the message will be delivered exactly once but we can guarantee that it will reach the destination at least once.
+

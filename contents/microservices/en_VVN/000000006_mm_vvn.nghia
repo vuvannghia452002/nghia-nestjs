@@ -1,0 +1,64 @@
+1
+00:00:00,840 --> 00:00:08,740
+With the database per service pattern each service has its own dedicated database that cannot be directly access by any other services.
+
+2
+00:00:08,940 --> 00:00:19,300
+This pattern is usually used when we want to achieve a high level of isolation between services. It's also very useful for one is different database technologies for different services.
+
+3
+00:00:19,860 --> 00:00:26,290
+So there are a few different ways to keep a services persistence they'd a private. Private tables per service.
+
+4
+00:00:26,490 --> 00:00:35,680
+This means that each service. Owns a set of tables that must only be accessed by that service. Other services cannot access these tables director.
+
+5
+00:00:35,790 --> 00:00:43,780
+If other services need to query data in these tables. They must do it through the owning service. Scheme up her service.
+
+6
+00:00:43,980 --> 00:00:53,820
+Each service has a database schema that's private to that service. And database server per service. Each service has its own dedicated database server.
+
+7
+00:00:54,270 --> 00:01:05,800
+This approach requires much more resources but it also provides a higher level of isolation. While having a separate database server per service generally makes a lot of sense for larger organizations.
+
+8
+00:01:06,030 --> 00:01:11,410
+Where teams are working on different services. It's not always the best choice for smaller organizations.
+
+9
+00:01:11,784 --> 00:01:21,400
+Of the drawbacks of this approach are increased complexity and cost. Managing distributed transactions is significantly more complex than local transit actions.
+
+10
+00:01:21,510 --> 00:01:32,050
+Some queries may require data from multiple services. Which means we need to implement joins across services which can lead to increased latency increased complexity etc.
+
+11
+00:01:33,180 --> 00:01:38,640
+On the other hand. Having a shared database server for all services is also considered a bad practice.
+
+12
+00:01:39,000 --> 00:01:46,770
+As a introduces tight coupling between services. If one service changes the database schema. All other services need to be updated as well.
+
+13
+00:01:47,400 --> 00:01:53,310
+Also if one service has a bug that corrupts the database. All other services will be affected by this as well.
+
+14
+00:01:53,940 --> 00:02:01,120
+Coordinating schema changes migrations etc between services can also be very challenging but not to say impossible.
+
+15
+00:02:02,460 --> 00:02:10,270
+Therefore in this course will be using the database per service approach. Although it may make things overly complex for our small application.
+
+16
+00:02:10,440 --> 00:02:20,400
+A may not be the best choice for our own product or organizations use case. This remember to always make sure to carefully consider the pros and cons before deciding on an architect you for your system.
+
