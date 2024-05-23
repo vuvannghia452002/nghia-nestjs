@@ -5,7 +5,7 @@ has at least one module
 
 2
 00:00:03,960 --> 00:00:04,740
-a root module.
+a route module.
 
 3
 00:00:05,220 --> 00:00:05,940
@@ -51,7 +51,7 @@ Instructs the nest framework to create an
 edge between these two points in the graph.
 
 12
-00:00:29,730 --> 00:00:31,620
+00:00:29,760 --> 00:00:31,620
 Although this graph
 is statically scoped
 
@@ -103,13 +103,13 @@ be an http request.
 However
 
 23
-00:00:57,390 --> 00:01:01,200
+00:00:57,390 --> 00:01:01,170
 for things like cron jobs this signal
-will be the invocation of the job itself
+will be the invocation of the job itself.
 
 24
 00:01:01,500 --> 00:01:04,950
-you can see that when it comes to how
+You can see that when it comes to how
 requests go providers are invoked it really
 
 25
@@ -123,11 +123,11 @@ In reaction to that signal.
 
 27
 00:01:09,900 --> 00:01:13,320
-Nasty as constructs a so called
-dependency injection subtree
+Know she has constructs a so
+called dependency injection subtree
 
 28
-00:01:13,620 --> 00:01:15,270
+00:01:13,620 --> 00:01:15,240
 that's associated
 with a given signal.
 
@@ -142,7 +142,7 @@ where an incoming http request
 31
 00:01:18,720 --> 00:01:22,020
 it instantiates a new controller
-that the key there's a specific route.
+that declares a specific route.
 
 32
 00:01:22,620 --> 00:01:23,340
@@ -160,7 +160,7 @@ request processing has completed.
 
 35
 00:01:29,880 --> 00:01:33,360
-In this lesson will showcase
+And this lesson will showcase
 how you can manually
 
 36
@@ -183,7 +183,7 @@ let's switch to r ID
 
 40
 00:01:39,630 --> 00:01:43,900
-and using the next year seal la la
+and using the nes jsc ally let's
 generate a new resource called tax.
 
 41
@@ -226,7 +226,7 @@ on the tax service which
 is now request scope.
 
 49
-00:02:06,930 --> 00:02:09,880
+00:02:06,960 --> 00:02:09,880
 It implicitly becomes
 request scope as well.
 
@@ -294,309 +294,312 @@ try to keep it a mind.
 Let's save our changes.
 
 63
-00:02:50,640 --> 00:02:52,950
+00:02:50,640 --> 00:02:51,630
 Open up our terminals
-and as we can see here
 
 64
+00:02:51,750 --> 00:02:52,950
+and as we can see here
+
+65
 00:02:53,099 --> 00:02:56,920
 are tag service was instantiate
 properly just as we should expect.
 
-65
+66
 00:02:57,150 --> 00:02:58,150
 Great.
 
-66
+67
 00:02:58,560 --> 00:02:59,820
 Back to our task at hand.
 
-67
+68
 00:03:00,300 --> 00:03:02,310
 Let's talk about what
 exactly happened here.
 
-68
+69
 00:03:03,000 --> 00:03:06,300
 So what the module ref dot
 resolve method does under the hood
 
-69
+70
 00:03:06,540 --> 00:03:09,840
 is that it internally constructs a
 dedicated dependency injection sub tree.
 
-70
+71
 00:03:10,200 --> 00:03:13,570
 Where our tax service is
 the root note of that tree.
 
-71
+72
 00:03:13,920 --> 00:03:18,000
 This sub tree has its own unique contexts
 identifier that represents that true.
 
-72
+73
 00:03:18,570 --> 00:03:19,560
 Who better understand that.
 
-73
-00:03:19,890 --> 00:03:23,700
+74
+00:03:19,890 --> 00:03:23,699
 Let's create two copies
 of the tag service provider
 
-74
-00:03:23,700 --> 00:03:25,270
+75
+00:03:23,699 --> 00:03:25,270
 calling resolve twice and
 comparing their references.
 
-75
+76
 00:03:28,080 --> 00:03:31,660
 And as we can see in our
 terminals they are in fact not equal.
 
-76
+77
 00:03:31,770 --> 00:03:35,070
 To as we've mentioned
 above the resolve method
 
-77
+78
 00:03:35,070 --> 00:03:35,610
 returns a unique
 instance of the provider
 
-78
+79
 00:03:35,730 --> 00:03:38,171
 from its own diy
 container subtree.
 
-79
+80
 00:03:38,220 --> 00:03:39,900
 These instances are not equal
 
-80
+81
 00:03:40,080 --> 00:03:42,190
 as they belong
 to different trees.
 
-81
+82
 00:03:42,840 --> 00:03:45,840
 To generate a single instance
 across multiple resolve calls
 
-82
+83
 00:03:45,954 --> 00:03:48,840
 in ensure are they share the same
 generated DEA container subtree.
 
-83
-00:03:49,170 --> 00:03:52,673
+84
+00:03:49,170 --> 00:03:52,672
 We can pass a context
 identifier to the resolve method.
 
-84
+85
 00:03:52,831 --> 00:03:53,220
 First.
 
-85
+86
 00:03:53,550 --> 00:03:57,816
 Let's use the context idea factory
 class to generate a context identifier.
 
-86
+87
 00:03:58,050 --> 00:03:59,850
 This class provides
 a create method.
 
-87
-00:04:00,194 --> 00:04:02,560
+88
+00:04:00,190 --> 00:04:02,560
 Returns inappropriate
 unique identifier.
 
-88
+89
 00:04:02,940 --> 00:04:04,770
 And with this context
 idea and place.
 
-89
+90
 00:04:05,130 --> 00:04:08,500
 Let's pass it in as the second for
 diameter of the resolved invocations.
 
-90
+91
 00:04:12,060 --> 00:04:13,380
 And if we save our changes
 
-91
+92
 00:04:13,740 --> 00:04:17,160
 and take a look at our
 terminals again we'll
 
-92
+93
 00:04:17,250 --> 00:04:17,850
 see that are instances
 are now equal hence true.
 
-93
+94
 00:04:18,360 --> 00:04:19,360
 Great.
 
-94
+95
 00:04:19,560 --> 00:04:20,100
 All right
 
-95
+96
 00:04:20,220 --> 00:04:22,740
 so we already know how
 to generate context ids
 
-96
+97
 00:04:22,860 --> 00:04:27,000
 ids that represent our subtrees and
 the actual DEA subtrees using either a
 
-97
+98
 00:04:27,210 --> 00:04:29,880
 specific contexts ID or
 the auto generate one.
 
-98
+99
 00:04:30,450 --> 00:04:34,649
 We also know that
 request scope providers can
 
-99
+100
 00:04:34,680 --> 00:04:35,130
 inject a request object
 acre a signal payload
 
-100
-00:04:35,411 --> 00:04:36,120
+101
+00:04:35,412 --> 00:04:36,120
 is associated
 
-101
+102
 00:04:36,240 --> 00:04:37,800
 with the host the i sub tree.
 
-102
+103
 00:04:38,250 --> 00:04:39,810
 So for demonstration purposes.
 
-103
+104
 00:04:40,140 --> 00:04:44,142
 As navigate to the tax service
 class an eject the request there.
 
-104
+105
 00:04:44,940 --> 00:04:47,860
 It's also make sure to
 console log the request out.
 
-105
+106
 00:04:48,660 --> 00:04:50,970
 Next let's switch back
 to the tags module file
 
-106
+107
 00:04:51,300 --> 00:04:52,500
 and to make things simpler
 
-107
+108
 00:04:52,800 --> 00:04:56,230
 let's make sure we create only
 one instance of the tax service.
 
-108
+109
 00:04:59,640 --> 00:05:03,990
 And now for demonstration purposes let's
 register a request payload for our sub tree
 
-109
+110
 00:05:04,290 --> 00:05:08,020
 using the register request by
 contacts ID method as follows.
 
-110
+111
 00:05:08,970 --> 00:05:10,450
 But save our changes.
 
-111
+112
 00:05:10,500 --> 00:05:12,270
 Open up our terminals and voila.
 
-112
+113
 00:05:12,660 --> 00:05:16,440
 There's our request object
 acre a signal payload that
 
-113
+114
 00:05:16,440 --> 00:05:17,820
 successfully associated
 with the host the i sub tree.
 
-114
+115
 00:05:18,480 --> 00:05:19,050
 Lastly
 
-115
+116
 00:05:19,320 --> 00:05:22,020
 just a few more important
 notes about the context ids.
 
-116
+117
 00:05:22,380 --> 00:05:26,500
 In fact a context ID is just a
 regular unique javascript object.
 
-117
+118
 00:05:26,700 --> 00:05:30,270
 Nest jazz associates sub to these
 with their corresponding ID objects
 
-118
+119
 00:05:30,570 --> 00:05:32,550
 and if the context ID
 gets garbage collected
 
-119
+120
 00:05:32,850 --> 00:05:34,560
 so does the entire dui sub tree.
 
-120
+121
 00:05:35,220 --> 00:05:37,050
 That meets the eye
 subtrees are ephemeral
 
-121
+122
 00:05:37,170 --> 00:05:41,110
 meaning that they are removed as
 soon as or context ideas garbage collected.
 
-122
+123
 00:05:41,490 --> 00:05:45,360
 Just keep in mind that if you keep track of
 the contexts ID for example by storing it
 
-123
+124
 00:05:45,360 --> 00:05:47,490
 in the static array or
 any other collection.
 
-124
+125
 00:05:47,910 --> 00:05:48,379
 The subtree
 
-125
+126
 00:05:48,480 --> 00:05:51,550
 associated with that context
 object will never get removed.
 
-126
+127
 00:05:52,021 --> 00:05:55,170
 It so now that we have an understanding
 of the basic mechanics of DEA subtrees.
 
-127
+128
 00:05:55,530 --> 00:05:59,080
 Let's dive into a bit more
 practical example in the next lesson.
